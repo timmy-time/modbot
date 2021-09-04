@@ -1,4 +1,4 @@
-const config = require("../config.json");
+const config = require("../utils/config.json");
 const { MessageEmbed, RichEmbed, Message } = require("discord.js");
 const fs = require("fs");
 let warns = JSON.parse(fs.readFileSync("./warnings.json", "utf8"));

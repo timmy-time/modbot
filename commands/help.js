@@ -1,57 +1,57 @@
-const config = require("../config.json");
-const { Discord, MessageEmbed, RichEmbed } = require("discord.js");
-const { stripIndents } = require("common-tags");
+const Discord = require('discord.js');
+const { prefix, colors } = require('./../utils/config.json');
+const embedColor = colors.default;
 
 module.exports = {
-    name: "help",
-    aliases: ["h"],
-    category: "info",
-    description: "Returns all commands, or one specific command info",
-    usage: "[command | alias]",
-    run: async (client, messageCreate, args) => {
-        if (args[0]) {
-            return getCMD(client, messageCreate, args[0]);
-        } else {
-            return getAll(client, messageCreate);
-        }
-    }
-}
+	name: 'help',
+	description: 'Get help on how to use the bot and the specific commands',
+	aliases: ['?', 'h'],
+	usage: '[command name]',
+	guildOnly: false,
+	args: false,
+	permissions: {
+		bot: [],
+		user: [],
+	},
+	execute: async (message, args, client) => {
+		const { commands } = message.client;
 
-function getAll(client, messageCreate) {
-    const embed = new MessageEmbed()
-        .setColor("RANDOM")
+		if (!args.length) {
+			const cmdHelpEmbed = new Discord.MessageEmbed()
+				.setTitle('**HELP**')
+				.setDescription(
+					`Command list: \n\`${commands
+						.map((command) => command.name)
+						.join(
+							' | '
+						)}\`\nYou can use \`${prefix}help {command name}\` to get info about a specific command!`
+				)
+				.setColor(embedColor);
+			return message.channel.send(cmdHelpEmbed);
+		}
 
-    const commands = (category) => {
-        return client.commands
-            .filter(cmd => cmd.category === category)
-            .map(cmd => `- \`${cmd.name}\``)
-            .join("\n");
-    }
+		const name = args[0].toLowerCase();
+		const command =
+			commands.get(name) ||
+			commands.find((cmd) => cmd.aliases && cmd.aliases.includes(name));
 
-    const info = client.categories
-        .map(cat => stripIndents`**${cat[0].toUpperCase() + cat.slice(1)}** \n${commands(cat)}`)
-        .reduce((string, category) => string + "\n" + category);
-    return messageCreate.channel.send({ embeds: [embed.setDescription(info)]});
-}
+		if (!command) {
+			return message.reply('This command does not exist!');
+		}
+		const cmdHelpEmbed = new Discord.MessageEmbed()
+			.setTitle(`${command.name} | Command info`)
+			.setDescription(command.description)
+			.addField('Usage', `\`${prefix + command.name} ${command.usage}\``, true)
+			.setColor(embedColor);
 
-function getCMD(client, messageCreate, input) {
-    const embed = new MessageEmbed()
+		if (command.aliases) {
+			cmdHelpEmbed.addField(
+				'Aliases',
+				`\`${command.aliases.join(' | ')}\``,
+				true
+			);
+		}
 
-    const cmd = client.commands.get(input.toLowerCase()) || client.commands.get(client.aliases.get(input.toLowerCase()));
-    
-    let info = `No information found for command **${input.toLowerCase()}**`;
-
-    if (!cmd) {
-        return messageCreate.channel.send(embed.setColor("RED").setDescription(info));
-    }
-
-    if (cmd.name) info = `**Command name**: ${cmd.name}`;
-    if (cmd.aliases) info += `\n**Aliases**: ${cmd.aliases.map(a => `\`${a}\``).join(", ")}`;
-    if (cmd.description) info += `\n**Description**: ${cmd.description}`;
-    if (cmd.usage) {
-        info += `\n**Usage**: ${cmd.usage}`;
-        embed.setFooter(`Syntax: <> = required, [] = optional`);
-    }
-
-    return messageCreate.channel.send({ embeds: [embed.setColor("GREEN").setDescription(info)]});
-}
+		return message.channel.send(cmdHelpEmbed);
+	},
+};

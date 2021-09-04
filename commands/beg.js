@@ -1,4 +1,4 @@
-const config = require("../config.json");
+const config = require("../utils/config.json");
 const { Discord, MessageEmbed, RichEmbed } = require("discord.js");
 const { stripIndents } = require("common-tags");
 const db = require('quick.db');//https://www.npmjs.com/package/quick.db

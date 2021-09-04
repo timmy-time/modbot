@@ -1,4 +1,4 @@
-const config = require("../config.json");
+const config = require("../utils/config.json");
 const { Discord, MessageEmbed } = require("discord.js");
 module.exports = {
     name: "delete",

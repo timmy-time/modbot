@@ -1,5 +1,5 @@
 const { Client, Collection, ShardingManager } = require("discord.js");
-const config = require("./config.json");
+const config = require("../utils/config.json");
 // Create your ShardingManger instance
 const manager = new ShardingManager('./index.js', {
     // for ShardingManager options see:

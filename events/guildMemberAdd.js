@@ -1,4 +1,4 @@
-const config = require("../../config.json");
+const config = require("../utils/config.json");
 module.exports = (client, data, member, guildMember) => {
 
 }

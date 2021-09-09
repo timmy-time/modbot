@@ -1,0 +1,26 @@
+const config = require("../../config.json");
+const { MessageEmbed, RichEmbed, Message } = require("discord.js");
+const { promptMessage, successEmbed } = require("../../functions.js");
+const fs = require("fs");
+const db = require('quick.db');//https://www.npmjs.com/package/quick.db
+module.exports = {
+    name: "level",
+    category: "xp",
+    description: "",
+    run: async (client, message, args, arguments) => {
+        let target = message.mentions.users.first() || message.author
+        let curlvl = (db.get(`xp.${message.guild.id}.${target.id}.level`)) // Current Level
+        let curxp = (db.get(`xp.${message.guild.id}.${target.id}.xp`)) // Current Xp
+        
+        const levelEmbed = new MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle('XP Level')
+        .addFields(
+            { name: 'Current Level', value: `${curlvl}` },
+            { name: 'Current XP', value: `${curxp}/${curlvl * 300}` },
+        )
+        .setTimestamp()
+
+        message.channel.send(levelEmbed);
+    }
+}

@@ -1,0 +1,23 @@
+const config = require("../../config.json");
+const { Discord, MessageEmbed, RichEmbed } = require("discord.js");
+const { stripIndents } = require("common-tags");
+
+module.exports = {
+    name: "test,
+    category: "test",
+    description: "test",
+    run: async (client, message, args) => {
+        try {
+            // Code goes here
+        }
+        catch(err) {
+          const failedEmbed = new MessageEmbed()
+              .setTitle(`Command could not be ran.`)
+              .addField(`Error:`, err)
+              .setFooter(`ModBot©2021`)
+            message.channel.send(failedEmbed);
+      }
+            
+
+    }
+}

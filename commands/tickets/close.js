@@ -5,13 +5,13 @@ module.exports = {
     name: "close",
     category: "tickets",
     description: "Closes a ticket",
-    run: async (client, message, args) => {
+    run: async (client, messageCreate, args) => {
 
-            if(message.channel.name.includes('ticket-')) {
-                const member = message.guild.members.cache.get(message.channel.name.split('ticket-').join(''));
-                if(message.member.hasPermission('ADMINISTRATOR') || message.channel.name === `ticket-${message.author.id}`) {
-                    message.channel.messages.fetch().then(async (messages) => {
-                        const output = messages.array().reverse().map(m => `${new Date(m.createdAt).toLocaleString('en-US')} - ${m.author.tag}: ${m.attachments.size > 0 ? m.attachments.first().proxyURL : m.content}`).join('\n');
+            if(messageCreate.channel.name.includes('ticket-')) {
+                const member = messageCreate.guild.members.cache.get(messageCreate.channel.name.split('ticket-').join(''));
+                if(messageCreate.member.hasPermission('ADMINISTRATOR') || messageCreate.channel.name === `ticket-${messageCreate.author.id}`) {
+                    messageCreate.channel.messageCreates.fetch().then(async (messageCreates) => {
+                        const output = messageCreates.array().reverse().map(m => `${new Date(m.createdAt).toLocaleString('en-US')} - ${m.author.tag}: ${m.attachments.size > 0 ? m.attachments.first().proxyURL : m.content}`).join('\n');
     
                         let response;
                         try {
@@ -22,12 +22,12 @@ module.exports = {
                                     languageId: 'text',
                                 },
                             ], {
-                                title: `Chat transcript for ${message.channel.name}`,
+                                title: `Chat transcript for ${messageCreate.channel.name}`,
                                 description: ' ',
                             });
                         }
                         catch(e) {
-                            return message.channel.send('An error occurred, please try again!');
+                            return messageCreate.channel.send('An error occurred, please try again!');
                         }
     
                         const embed = new MessageEmbed()
@@ -36,23 +36,23 @@ module.exports = {
                         member.send('Here is a transcript of your ticket, please click the link below to vew the transcript', embed);
                     }).then(() => {
                         try {
-                            message.channel.updateOverwrite(member.user, {
+                            messageCreate.channel.updateOverwrite(member.user, {
                                 VIEW_CHANNEL: false,
-                                SEND_MESSAGES: false,
+                                SEND_messageCreateS: false,
                                 ATTACH_FILES: false,
-                                READ_MESSAGE_HISTORY: false,
+                                READ_messageCreate_HISTORY: false,
                             }).then(() => {
-                                message.channel.send(`Successfully closed ${message.channel}`);
+                                messageCreate.channel.send(`Successfully closed ${messageCreate.channel}`);
                             });
                         }
                         catch(e) {
-                            return message.channel.send('An error occurred, please try again!');
+                            return messageCreate.channel.send('An error occurred, please try again!');
                         }
                     });
                 }
             }
             else {
-                return message.reply('you cannot use this command here. Please use this command when you\'re closing a ticket.');
+                return messageCreate.reply('you cannot use this command here. Please use this command when you\'re closing a ticket.');
             }
         }
 }

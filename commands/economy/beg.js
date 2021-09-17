@@ -8,25 +8,25 @@ module.exports = {
     name: "beg",
     category: "currency",
     description: "Returns the balance",
-    run: async (client, message, args) => {
+    run: async (client, messageCreate, args) => {
         try {
-            if (talkedRecently.has(message.author.id)) {
-                message.channel.send(message.author.username + " Please wait 30 seconds before trying to beg again");
+            if (talkedRecently.has(messageCreate.author.id)) {
+                messageCreate.channel.send(messageCreate.author.username + " Please wait 30 seconds before trying to beg again");
             } else {
     
                // the user can type the command ... your command code goes here :)
     
                 // Adds the user to the set so that they can't talk for a minute
-                talkedRecently.add(message.author.id);
+                talkedRecently.add(messageCreate.author.id);
                 setTimeout(() => {
                     // Removes the user from the set after a minute
-                    talkedRecently.delete(message.author.id);
+                    talkedRecently.delete(messageCreate.author.id);
                 }, 30000);
         
     
     
 
-                const target = message.mentions.users.first() || message.author
+                const target = messageCreate.mentions.users.first() || messageCreate.author
                 if (db.has(`myUserBalance.${target.id}.wallet`) == false) { 
                     db.set(`myUserBalance.${target.id}`, { userid: `${target.id}`, wallet: 0, minbank: 0, maxbank: 1000,curbankamt: 0, items: []})
                 }
@@ -39,7 +39,7 @@ module.exports = {
                         .setTitle(target.username)
                         .addField(`Beg`, `A nice man gave you ⏣${rint}`)
                         .setFooter(`ModBot©2021`)
-                    message.channel.send(begEmbed);
+                    messageCreate.channel.send(begEmbed);
                 } else if (randint == 2) {
                     let rint = random.int(0, 250)
                     db.add(`myUserBalance.${target.id}.wallet`, rint)
@@ -47,7 +47,7 @@ module.exports = {
                         .setTitle(target.username)
                         .addField(`Beg`, `A nice man gave you ⏣${rint}`)
                         .setFooter(`ModBot©2021`)
-                    message.channel.send(begEmbed);
+                    messageCreate.channel.send(begEmbed);
                 } else if (randint == 3) {
                     let rint = random.int(0, 250)
                     db.add(`myUserBalance.${target.id}.wallet`, rint)
@@ -55,7 +55,7 @@ module.exports = {
                         .setTitle(target.username)
                         .addField(`Beg`, `A nice man gave you ⏣${rint}`)
                         .setFooter(`ModBot©2021`)
-                    message.channel.send(begEmbed);
+                    messageCreate.channel.send(begEmbed);
                 } else if (randint == 4) {
                     let rint = random.int(0, 250)
                     db.add(`myUserBalance.${target.id}.wallet`, rint)
@@ -63,7 +63,7 @@ module.exports = {
                         .setTitle(target.username)
                         .addField(`Beg`, `A nice man gave you ⏣${rint}`)
                         .setFooter(`ModBot©2021`)
-                    message.channel.send(begEmbed);                    
+                    messageCreate.channel.send(begEmbed);                    
                 } else if (randint == 5) {
                     let rint = random.int(0, 250)
                     db.add(`myUserBalance.${target.id}.wallet`, rint)
@@ -71,7 +71,7 @@ module.exports = {
                         .setTitle(target.username)
                         .addField(`Beg`, `A nice man gave you ⏣${rint}`)
                         .setFooter(`ModBot©2021`)
-                    message.channel.send(begEmbed);
+                    messageCreate.channel.send(begEmbed);
                 } else if (randint == 6) {
                     let rint = random.int(0, 250)
                     db.add(`myUserBalance.${target.id}.wallet`, rint)
@@ -79,7 +79,7 @@ module.exports = {
                         .setTitle(target.username)
                         .addField(`Beg`, `A nice man gave you ⏣${rint}`)
                         .setFooter(`ModBot©2021`)
-                    message.channel.send(begEmbed);
+                    messageCreate.channel.send(begEmbed);
                 } else if (randint == 7) {
                     let rint = random.int(0, 250)
                     db.add(`myUserBalance.${target.id}.wallet`, rint)
@@ -87,7 +87,7 @@ module.exports = {
                         .setTitle(target.username)
                         .addField(`Beg`, `A nice man gave you ⏣${rint}`)
                         .setFooter(`ModBot©2021`)
-                    message.channel.send(begEmbed);
+                    messageCreate.channel.send(begEmbed);
                 } else if (randint == 8) {
                     let rint = random.int(0, 250)
                     db.add(`myUserBalance.${target.id}.wallet`, rint)
@@ -95,7 +95,7 @@ module.exports = {
                         .setTitle(target.username)
                         .addField(`Beg`, `A nice man gave you ⏣${rint}`)
                         .setFooter(`ModBot©2021`)
-                    message.channel.send(begEmbed);
+                    messageCreate.channel.send(begEmbed);
                 } else if (randint == 9) {
                     let rint = random.int(0, 250)
                     db.add(`myUserBalance.${target.id}.wallet`, rint)
@@ -103,7 +103,7 @@ module.exports = {
                         .setTitle(target.username)
                         .addField(`Beg`, `A nice man gave you ⏣${rint}`)
                         .setFooter(`ModBot©2021`)
-                    message.channel.send(begEmbed);
+                    messageCreate.channel.send(begEmbed);
                 } else if (randint == 10) {
                     let rint = random.int(0, 250)
                     db.add(`myUserBalance.${target.id}.wallet`, rint)
@@ -111,14 +111,14 @@ module.exports = {
                         .setTitle(target.username)
                         .addField(`Beg`, `A nice man gave you ⏣${rint}`)
                         .setFooter(`ModBot©2021`)
-                    message.channel.send(begEmbed);
+                    messageCreate.channel.send(begEmbed);
                 }
             }            
         } catch(err) {
           const failedEmbed = new MessageEmbed()
                 .addField(`Error`, err)
                 .setFooter(`ModBot©2021`)
-            message.channel.send(failedEmbed);
+            messageCreate.channel.send(failedEmbed);
         }
     }
 }

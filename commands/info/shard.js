@@ -5,13 +5,13 @@ module.exports = {
     name: "shard",
     category: "info",
     description: "Lists the current shards",
-    run: async (client, message, args) => {    
+    run: async (client, messageCreate, args) => {    
         try {
             let maxshards = 5;   
             let subscriptionstatus = false;
             let alwaysplayingstatus = false;
             let nodenum = os.hostname();
-            message.channel.send("**__Generic__**\n- Server ID ``" + message.guild.id + "``\n- Shard: ``[" + message.guild.shardID +  " / " + maxshards + "]``\n- Node ``" + nodenum + "``\n- API Latency ``" + Math.round(client.ws.ping) + "ms``\n- Server Region ``sydney``\n**__Premium__**\n- Subscription ``" + subscriptionstatus + "``\n- Always Playing ``" + alwaysplayingstatus + "``")
+            messageCreate.channel.send("**__Generic__**\n- Server ID ``" + messageCreate.guild.id + "``\n- Shard: ``[" + messageCreate.guild.shardID +  " / " + maxshards + "]``\n- Node ``" + nodenum + "``\n- API Latency ``" + Math.round(client.ws.ping) + "ms``\n- Server Region ``sydney``\n**__Premium__**\n- Subscription ``" + subscriptionstatus + "``\n- Always Playing ``" + alwaysplayingstatus + "``")
                     
             }
             catch(err) {
@@ -19,7 +19,7 @@ module.exports = {
                     .setTitle(`Command could not be ran.`)
                     .addField(`Error:`, err)
                     .setFooter(`ModBot©2021`)
-                message.channel.send(failedEmbed);
+                messageCreate.channel.send(failedEmbed);
             }
         }
     }

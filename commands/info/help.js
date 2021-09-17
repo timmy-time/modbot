@@ -8,16 +8,16 @@ module.exports = {
     category: "info",
     description: "Returns all commands, or one specific command info",
     usage: "[command | alias]",
-    run: async (client, message, args) => {
+    run: async (client, messageCreate, args) => {
         if (args[0]) {
-            return getCMD(client, message, args[0]);
+            return getCMD(client, messageCreate, args[0]);
         } else {
-            return getAll(client, message);
+            return getAll(client, messageCreate);
         }
     }
 }
 
-function getAll(client, message) {
+function getAll(client, messageCreate) {
     const embed = new MessageEmbed()
         .setColor("RANDOM")
 
@@ -32,10 +32,10 @@ function getAll(client, message) {
         .map(cat => stripIndents`**${cat[0].toUpperCase() + cat.slice(1)}** \n${commands(cat)}`)
         .reduce((string, category) => string + "\n" + category);
 
-    return message.channel.send(embed.setDescription(info));
+    return messageCreate.channel.send(embed.setDescription(info));
 }
 
-function getCMD(client, message, input) {
+function getCMD(client, messageCreate, input) {
     const embed = new MessageEmbed()
 
     const cmd = client.commands.get(input.toLowerCase()) || client.commands.get(client.aliases.get(input.toLowerCase()));
@@ -43,7 +43,7 @@ function getCMD(client, message, input) {
     let info = `No information found for command **${input.toLowerCase()}**`;
 
     if (!cmd) {
-        return message.channel.send(embed.setColor("RED").setDescription(info));
+        return messageCreate.channel.send(embed.setColor("RED").setDescription(info));
     }
 
     if (cmd.name) info = `**Command name**: ${cmd.name}`;
@@ -54,5 +54,5 @@ function getCMD(client, message, input) {
         embed.setFooter(`Syntax: <> = required, [] = optional`);
     }
 
-    return message.channel.send(embed.setColor("GREEN").setDescription(info));
+    return messageCreate.channel.send(embed.setColor("GREEN").setDescription(info));
 }

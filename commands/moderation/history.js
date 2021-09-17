@@ -1,5 +1,5 @@
 const config = require("../../config.json");
-const { MessageEmbed, RichEmbed, Message } = require("discord.js");
+const { MessageEmbed, RichEmbed, messageCreate } = require("discord.js");
 const fs = require("fs");
 let warns = JSON.parse(fs.readFileSync("./warnings.json", "utf8"));
 const db = require('quick.db');//https://www.npmjs.com/package/quick.db
@@ -7,27 +7,27 @@ module.exports = {
     name: "history",
     category: "moderation",
     description: "Lists the history of the user provided.",
-    run: async (client, message, args, arguments) => {
+    run: async (client, messageCreate, args, arguments) => {
         try {
-            const target = message.mentions.users.first()
+            const target = messageCreate.mentions.users.first()
             if (!target) {
-                message.reply('Please specify a user to load the warnings for.')
+                messageCreate.reply('Please specify a user to load the warnings for.')
             return
         }
         }catch(err) {
             const failedEmbed = new MessageEmbed()
                 .addField(`Error`, err)
                 .setFooter(`ModBot©2021`)
-              message.channel.send(failedEmbed);
+              messageCreate.channel.send(failedEmbed);
         }
         finally {
-            const target = message.mentions.users.first()
-                let warnlevel = db.get(`myUserWarns.${target.id}.${message.guild.id}.warns`);
-                let warnreasons = db.get(`myUserWarns.${target.id}.${message.guild.id}.reasons`);
+            const target = messageCreate.mentions.users.first()
+                let warnlevel = db.get(`myUserWarns.${target.id}.${messageCreate.guild.id}.warns`);
+                let warnreasons = db.get(`myUserWarns.${target.id}.${messageCreate.guild.id}.reasons`);
     
                 let HistoryEmbed = new MessageEmbed()
                     .setTitle(`${target.username}'s History`)
-                    .setFooter(`Command ran by ${message.author.username}`)
+                    .setFooter(`Command ran by ${messageCreate.author.username}`)
                     .setColor("#0099ff");
     
                     if (warnlevel = 0) {
@@ -40,7 +40,7 @@ module.exports = {
                 
                     
                     }
-                    message.channel.send(HistoryEmbed);
+                    messageCreate.channel.send(HistoryEmbed);
                 }
         }
     }

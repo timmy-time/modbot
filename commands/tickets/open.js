@@ -4,30 +4,30 @@ module.exports = {
     name: "open",
     category: "tickets",
     description: "opens a previously opened ticket or application.",
-    run: async (client, message, args) => {
-            if(message.channel.name.includes('ticket-')) {
-                const member = message.guild.members.cache.get(message.channel.name.split('ticket-').join(''));
+    run: async (client, messageCreate, args) => {
+            if(messageCreate.channel.name.includes('ticket-')) {
+                const member = messageCreate.guild.members.cache.get(messageCreate.channel.name.split('ticket-').join(''));
                 try {
-                    message.channel.updateOverwrite(member.user, {
+                    messageCreate.channel.updateOverwrite(member.user, {
                         VIEW_CHANNEL: true,
-                        SEND_MESSAGES: true,
+                        SEND_messageCreateS: true,
                         ATTACH_FILES: true,
-                        READ_MESSAGE_HISTORY: true,
+                        READ_messageCreate_HISTORY: true,
                     })
                         .then(() => {
-                            message.channel.send(`Successfully re-opened ${message.channel}`);
-                            let logchannel = message.guild.channels.cache.find(channel => channel.name === `ticket-logs`)
+                            messageCreate.channel.send(`Successfully re-opened ${messageCreate.channel}`);
+                            let logchannel = messageCreate.guild.channels.cache.find(channel => channel.name === `ticket-logs`)
                             if(logchannel) {
-                                logchannel.send(`the ticket ${message.channel} has been reopened`);
+                                logchannel.send(`the ticket ${messageCreate.channel} has been reopened`);
                             }
                         });
                 }
                 catch (e) {
-                    return message.channel.send('An error occurred, please try again!');
+                    return messageCreate.channel.send('An error occurred, please try again!');
                 }
             }
             else {
-                return message.reply(
+                return messageCreate.reply(
                     'you cannot use this command here. Please use this command on a closed ticket.',
                 );
             }

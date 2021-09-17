@@ -1,10 +1,19 @@
-const { Client, Collection } = require("discord.js");
+const fs = require('fs');
 const config = require("./config.json");
-const { readdirSync } = require("fs");
-const logger = require("discordjs-logger"); // https://github.com/onepiecehung/discordjs-logger/blob/master/README.md
-const db = require('quick.db');
-const client = new Client({ partials: ["MESSAGE", "CHANNEL", "REACTION"] });
-["aliases", "commands"].forEach(x => client[x] = new Collection());
-["command", "event"].forEach(x => require(`./handlers/${x}`)(client));
-client.categories = readdirSync("./commands/");
+const { Client, Intents } = require('discord.js');
+const { token } = require('./config.json');
+
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+
+const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+
+//Event Handler
+for (const file of eventFiles) {
+	const event = require(`./events/${file}`);
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args));
+	} else {
+		client.on(event.name, (...args) => event.execute(...args));
+	}
+}
 client.login(config.token);

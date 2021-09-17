@@ -4,17 +4,17 @@ module.exports = {
     name: "delete",
     category: "tickets",
     description: "Deletes the ticket channel.",
-    run: async (client, message, args) => {
+    run: async (client, messageCreate, args) => {
 
-            if(message.channel.name.includes('ticket-')) {
-                message.channel.delete();
-                let logchannel = message.guild.channels.cache.find(channel => channel.name === `ticket-logs`)
+            if(messageCreate.channel.name.includes('ticket-')) {
+                messageCreate.channel.delete();
+                let logchannel = messageCreate.guild.channels.cache.find(channel => channel.name === `ticket-logs`)
                 if(logchannel) {
-                    logchannel.send(`${message.channel.name} has been deleted by ${message.author.username}.`);
+                    logchannel.send(`${messageCreate.channel.name} has been deleted by ${messageCreate.author.username}.`);
                 }
             }
             else {
-                return message.reply('you cannot use this command here. Please use this command when you want to delete a ticket.');
+                return messageCreate.reply('you cannot use this command here. Please use this command when you want to delete a ticket.');
             }
         
     }

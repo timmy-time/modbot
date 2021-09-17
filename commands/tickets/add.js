@@ -4,28 +4,28 @@ module.exports = {
     name: "add",
     category: "tickets",
     description: "Deletes the ticket channel.",
-    run: async (client, message, args, channel) => {
-		if(message.channel.name.includes('ticket-')) {
-			const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(x => x.user.username === args.slice(0).join(' ') || x.user.username === args[0]);
+    run: async (client, messageCreate, args, channel) => {
+		if(messageCreate.channel.name.includes('ticket-')) {
+			const member = messageCreate.mentions.members.first() || messageCreate.guild.members.cache.get(args[0]) || messageCreate.guild.members.cache.find(x => x.user.username === args.slice(0).join(' ') || x.user.username === args[0]);
 			if(!member) {
-				return message.channel.send(`Incorrect Usage! Correct Usage:${config.prefix}add <member>`);
+				return messageCreate.channel.send(`Incorrect Usage! Correct Usage:${config.prefix}add <member>`);
 			}
 			try{
-				message.channel.updateOverwrite(member.user, {
+				messageCreate.channel.updateOverwrite(member.user, {
 					VIEW_CHANNEL: true,
-					SEND_MESSAGES: true,
+					SEND_messageCreateS: true,
 					ATTACH_FILES: true,
-					READ_MESSAGE_HISTORY: true,
+					READ_messageCreate_HISTORY: true,
 				}).then(() => {
-					message.channel.send(`Successfully added ${member} to ${message.channel}`);
-					let logchannel = message.guild.channels.cache.find(channel => channel.name === `ticket-logs`)
+					messageCreate.channel.send(`Successfully added ${member} to ${messageCreate.channel}`);
+					let logchannel = messageCreate.guild.channels.cache.find(channel => channel.name === `ticket-logs`)
 					if(logchannel) {
-						logchannel.send(`${member} was added to this ticket ${message.channel}`);
+						logchannel.send(`${member} was added to this ticket ${messageCreate.channel}`);
 					}
 				});
 			}
 			catch(e) {
-				return message.channel.send('An error occurred, please try again!');
+				return messageCreate.channel.send('An error occurred, please try again!');
 			}
 		}
 	}

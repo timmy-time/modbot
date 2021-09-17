@@ -6,18 +6,18 @@ module.exports = {
     name: "ping",
     category: "info",
     description: "Returns latency and API ping.",
-    run: async (client, message, args) => {
+    run: async (client, messageCreate, args) => {
         try {
-            let ping = message.createdTimestamp - message.createdTimestamp
+            let ping = messageCreate.createdTimestamp - messageCreate.createdTimestamp
     
                 const Embed = new MessageEmbed()
-                .setDescription(`Checking the ping...\n${client.user.username} ➜ Command ran by ${message.author.username}`)
+                .setDescription(`Checking the ping...\n${client.user.username} ➜ Command ran by ${messageCreate.author.username}`)
                 .setColor('#4287f5');
-                message.channel.send(Embed).then((embedMessage) => {
+                messageCreate.channel.send(Embed).then((embedmessageCreate) => {
                 setTimeout(async () => {
-                 Embed.setDescription(`PONG! Latency is ${ping}ms\nAPI Latency is ${Math.round(client.ws.ping)}ms\n${client.user.username} ➜ Command ran by ${message.author.username}`)
-                 await embedMessage.delete().catch((error) => console.log(error));
-                 message.channel.send(Embed);
+                 Embed.setDescription(`PONG! Latency is ${ping}ms\nAPI Latency is ${Math.round(client.ws.ping)}ms\n${client.user.username} ➜ Command ran by ${messageCreate.author.username}`)
+                 await embedmessageCreate.delete().catch((error) => console.log(error));
+                 messageCreate.channel.send(Embed);
                 }, 2000);
             })
     
@@ -28,7 +28,7 @@ module.exports = {
               .setTitle(`${wUser} could not be ${moderationDerivedType}.`)
               .addField(`Error`, err)
               .setFooter(`ModBot©2021`)
-            message.channel.send(failedEmbed);
+            messageCreate.channel.send(failedEmbed);
       }
             
 

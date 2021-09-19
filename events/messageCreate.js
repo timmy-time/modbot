@@ -1,48 +1,35 @@
-const { del } = require("../functions.js");
-const config = require("../config.json");
-const db = require('quick.db');//https://www.npmjs.com/package/quick.db
-let XPCONSOLELOG = 'true';
+const { MessageEmbed, Message, MessageAttachment } = require("discord.js");
+const { MessageButton, MessageActionRow } = require("gcommands/src");
+const config = require("../config.js");
+const db = require('quick.db');
 const random = require('random')
 
+
 module.exports = {
-    name: 'messageCreate',
-    execute: async (messageCreate, client) => {
-        console.log("a")
-        if (messageCreate.author.bot) return;
-        if (!messageCreate.guild) return;
-        
-        //if (db.has('guild.prefix') == false) {
-        //    db.set(`guild.prefix`, { prefix: config.defaultprefix})
-        //}
-
+    name: "messageCreate",
+    once: false,
+    run: async(messageCreate, message, client) => {
+        if (message.author.bot) return;
+        if (!message.guild) return;
         // XP System
-        if (db.has(`${messageCreate.guild.id}_${messageCreate.author.id}_exp.xp`) == false) {
-            db.set(`${messageCreate.guild.id}_${messageCreate.author.id}_exp`, { xp: 0, level: 1})
+        if (db.has(`${message.guild.id}_${message.author.id}_exp.xp`) == false) {
+            db.set(`${message.guild.id}_${message.author.id}_exp`, { xp: 0, level: 1})
         }
-    
-        let curlvl = await db.get(`${messageCreate.guild.id}_${messageCreate.author.id}_exp.level`);
+        let curlvl = await db.get(`${message.guild.id}_${message.author.id}_exp.level`);
+        db.add(`${message.guild.id}_${message.author.id}_exp.xp`, random.int(5, 50))
+        if (db.get(`${message.guild.id}_${message.author.id}_exp.xp`) >= curlvl * 300) {
+            db.subtract(`${message.guild.id}_${message.author.id}_exp.xp`, curlvl * 300);
+            db.add(`${message.guild.id}_${message.author.id}_exp.level`, 1);
+            const levelEmbed = new MessageEmbed()
+                .setColor('#0099ff')
+                .setTitle('Level up!')
+                .addFields(
+                    { name: 'Current Level', value: `${curlvl}`, inline: true},
+                    { name: 'New Level', value: `${curlvl + 1}`, inline: true},
+                )
+                .setTimestamp()
 
-        db.add(`${messageCreate.guild.id}_${messageCreate.author.id}_exp.xp`, random.int(5, 50))
-
-        if (db.get(`${messageCreate.guild.id}_${messageCreate.author.id}_exp.xp`) >= curlvl * 300) {
-            db.subtract(`${messageCreate.guild.id}_${messageCreate.author.id}_exp.xp`, curlvl * 300);
-            db.add(`${messageCreate.guild.id}_${messageCreate.author.id}_exp.level`, 1);
-        }
-        if (messageCreate.content === `${config.defaultprefix}`) return;
-        if (!messageCreate.content.startsWith(config.defaultprefix) && !messageCreate.content.replace(/\D/g, "")) return;
-        
-        if (!messageCreate.member) messageCreate.member = await messageCreate.guild.fetchMember(messageCreate).catch(err => err);
-        const args = messageCreate.content.startsWith(config.defaultprefix) ? messageCreate.content.slice(config.defaultprefix.length).trim().split(/ +/g) : messageCreate.content.replace(/[^\s]*/, "").trim().split(/ +/g);
-        const cmd = args.shift().toLowerCase();
-
-        if (cmd.length === 0) return;
-
-        let command = client.commands.get(cmd);
-        if (!command) command = client.commands.get(client.aliases.get(cmd));
-
-        if (command) {
-            del(messageCreate, 0);
-            command.run(client, messageCreate, args);
+                message.channel.send({ embeds: levelEmbed});
         }
     }
-    }
+}

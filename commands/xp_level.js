@@ -26,6 +26,7 @@ module.exports = class extends Command {
             { name: 'Current XP', value: `${curxp}/${curlvl * 300}` },
         )
         .setTimestamp()
+        .setFooter(`Requested by ${message.author.username}`)
 
         message.channel.send({ embeds: levelEmbed});
     }

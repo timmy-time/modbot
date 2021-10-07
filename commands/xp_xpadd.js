@@ -20,10 +20,11 @@ module.exports = class extends Command {
         if (args[0] >= 10001) {
             message.channel.send("This process isn't possible complete due to being over 10,000.")
         } else {
-            let target = message.mentions.users.first() ||  message.author // Not grabbing Mentions //
+            let target = message.mentions.users.first() ||  message.author                                                  // Not grabbing Mentions //
             let curlvl = (db.get(`${message.guild.id}_${message.author.id}_exp.level`)) // Current Level
             let curxp = (db.get(`${message.guild.id}_${message.author.id}_exp.xp`)) // Current Xp
             db.add(`${message.guild.id}_${message.author.id}_exp.xp`, args[0])
+            db.add(`${message.guild.id}_${message.author.id}_exp.allxp`, args[0])
             while (db.get(`${message.guild.id}_${message.author.id}_exp.xp`) >= curlvl * 300) {
                 db.subtract(`${message.guild.id}_${message.author.id}_exp.xp`, curlvl * 300);
                 db.add(`${message.guild.id}_${message.author.id}_exp.level`, 1);
@@ -42,6 +43,7 @@ module.exports = class extends Command {
                     { name: 'New XP', value: `${newxp}/${newlvl * 300}` },
                 )
                 .setTimestamp()
+                .setFooter(config.footer)
     
             message.channel.send({embeds: levelEmbed});
 

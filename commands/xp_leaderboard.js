@@ -7,14 +7,15 @@ const config = require("../config.js")
 module.exports = class extends Command {
     constructor(...args) {
         super(...args, {
-            name: "leaderboard",
+            name: "xpleaderboard",
             description: "Returns the user's xp level",
 
         });
     }
 
     async run({ client, respond, interaction, messageCreate, message}) { 
-        let firstplace = 0;
+        
+        /*let firstplace = 0;
         let firstplaceperson = "";
         let secondplace = 0;
         let secondplaceperson = "";
@@ -27,5 +28,7 @@ module.exports = class extends Command {
         .addField(`2. ${secondplaceperson}`, secondplace)
         .addField(`3. ${thirdplaceperson}`, thirdplace)
         message.channel.send({embeds: embed});
+        */
+
     }
 }

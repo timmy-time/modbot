@@ -13,10 +13,11 @@ module.exports = {
         if (!message.guild) return;
         // XP System
         if (db.has(`${message.guild.id}_${message.author.id}_exp.xp`) == false) {
-            db.set(`${message.guild.id}_${message.author.id}_exp`, { xp: 0, level: 1})
+            db.set(`${message.guild.id}_${message.author.id}_exp`, { xp: 0, level: 1, allxp: 0})
         }
         let curlvl = await db.get(`${message.guild.id}_${message.author.id}_exp.level`);
         db.add(`${message.guild.id}_${message.author.id}_exp.xp`, random.int(5, 50))
+        db.add(`${message.guild.id}_${message.author.id}_exp.allxp`, random.int(5, 50))
         if (db.get(`${message.guild.id}_${message.author.id}_exp.xp`) >= curlvl * 300) {
             db.subtract(`${message.guild.id}_${message.author.id}_exp.xp`, curlvl * 300);
             db.add(`${message.guild.id}_${message.author.id}_exp.level`, 1);

@@ -9,7 +9,7 @@ module.exports = class extends Command {
         super(...args, {
             name: "clear",
             aliases: ["purge", "nuke"],
-            description: "Clears the chat",
+            description: "Clears up to 100",
             minArgs: 1,
 
         });
@@ -38,11 +38,15 @@ module.exports = class extends Command {
             if (args[0] > 100) return message.reply("You cannot delete more than 100 messages!");
             if (args[0] < 1) return message.reply("You cannot delete less than 1 message!");
             try {
-            await message.channel.message.fetch({ limit: args[0] }).then(messages => {
-                message.channel.bulkDelete(messages);
-            });
+                message.channel.bulkDelete(args[0]).catch(err => {
+                    message.channel.send(':x: Due to Discord Limitations, I cannot delete messages older than 14 days') })
+      
+              let msg = await message.channel.send(`Deleted \`${args[0]}\` messages`)
+              setTimeout(() => {
+                  msg.delete()
+              }, 2000)
             } catch (err) {
-                console.log(err)
+                client.channels.cache.get("892734251785682976").send({embeds: errorEmbed});
             }
         } 
     }

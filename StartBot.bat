@@ -1,7 +1,7 @@
 @echo off
 echo Starting..
 :main
-npm install
+node deploy-commands.js
 node index.js
 echo Restarting Bot..
 goto main

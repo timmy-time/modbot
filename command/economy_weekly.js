@@ -12,7 +12,7 @@ module.exports = class extends Command {
     }
 
     async run({ client, respond, interaction, messageCreate, message }, args) {  
-        const target = message.author || message.mentions.users.first()
+        const target = message.author
         if (db.has(`eco_${target.id}.wallet`) == false) { 
             db.set(`eco_${target.id}`, { userid: `${target.id}`, totalbal: 0, wallet: 0, minbank: 0, maxbank: 1000,curbankamt: 0, daily: 0, items: []})
         }
@@ -28,6 +28,7 @@ module.exports = class extends Command {
             .setDescription(`:white_check_mark: You've collected your daily reward of ${amount} coins`);
         message.channel.send({embeds: moneyEmbed})
         db.add(`eco_${target.id}.wallet`, amount)
+        db.add(`eco_${target.id}.totalbal`, amount)
 
 
         }

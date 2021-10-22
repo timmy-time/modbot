@@ -1,32 +1,41 @@
-const { Client, Intents } = require("discord.js")
-const { GCommands } = require("gcommands")
-const config = require("./config.js")
-const path = require('path')
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const { REST } = require('@discordjs/rest');
+const { Client, Intents, Collection } = require('discord.js');
+const { Routes } = require('discord-api-types/v9');
+const { token } = require('./config.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const fs = require('fs');
+const path = require('path');
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
+client.commands = new Collection();
+const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+for (const file of eventFiles) {
+	const event = require(`./events/${file}`);
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args));
+	} else {
+		client.on(event.name, (...args) => event.run(...args));
+	}
+}
+//// Commands ////
 
-client.on("ready", () => {
-    const gc = new GCommands(client, {
-        cmdDir: path.join(__dirname, "commands"),
-        eventDir: path.join(__dirname, "events"),
-        language: "english",
-        unkownCommandMessage: false,
-        commands: {
-            slash: 'both',
-            prefix: config.prefix
-        },
-        /* DB SUPPORT
-         * redis://user:pass@localhost:6379
-         * mongodb://user:pass@localhost:27017/dbname
-         * sqlite://path/to/database.sqlite
-         * postgresql://user:pass@localhost:5432/dbname
-         * mysql://user:pass@localhost:3306/dbname
-        */
-    })
-
-    gc.on("debug", (debug)=>{console.log(debug)})
-    gc.on("log", (log)=>{console.log(log)})
+client.on("interactionCreate", async (interaction) => {
+	const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+	for (const file of commandFiles) {
+		const command = require(`./commands/${file}`);
+		client.commands.set(command.data.name, command);
+	}
+	if (!interaction.isCommand()) return;
+	const command = client.commands.get(interaction.commandName);
+	if (!command) return;
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: `There was an error while executing this command!\n Error: ${error}`, ephemeral: false });
+	}
 })
-
-
-client.login(config.token);
+client.on("ready", () => {
+  console.log('Loaded Slash Commands')
+})
+client.login(token);

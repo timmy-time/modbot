@@ -71,9 +71,6 @@ module.exports = class extends Command {
         let money = await db.fetch(`eco_${target.id}.wallet`)
         let bank = await db.fetch(`eco_${target.id}.curbankamt`)
         let maxbank = await db.fetch(`eco_${target.id}.maxbank`)
-        console.log(money)
-        console.log(bank)
-        console.log(maxbank)
         if (args[0] > (maxbank-bank)) {
             let embedbank = new MessageEmbed()
             .setColor('#FFFFFF')

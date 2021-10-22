@@ -11,25 +11,20 @@ module.exports = class extends Command {
         });
     }
     async run({ client, respond, interaction, messageCreate, message }, args) {  
-        let money = db.all().filter(entry => entry.ID.startsWith(`eco_`)).sort((a, b) => a.data < b.data);
-        console.log(money)
-        let content = ""
-            for (let i = 0; i < 1; i++) {
-                try {
-                    let user = await client.users.cache.get(money[i].ID.split('_')[1])
-                    content = content + `${i+1}. ${user.username} ~ ${money[i].data.wallet}\n`
-                    console.log(`Content: ${content}`)
-                } catch(e) {
-                    console.log(e)
-                }
-                
+        let content = "";
+        let money = db.all().filter(data => data.ID.startsWith(`eco_`)).sort((a, b) => b.data - a.data)
+        money.length = 10;
+        try {
+            for (var i in money) {
+                content += `**${money.indexOf(money[i])+1}.**     <@${money[i].ID.slice(4)}> - \`${money[i].data.totalbal} Coins\`\n`;
             }
-
-            console.log(`Content: ${content}`)
+        } catch(e) {
+            console.log(e)
+        }
+        console.log(`Content: ${content}`)
         const embed = new MessageEmbed()
         .setDescription(`**${message.guild.name}'s Coin Leaderboard**\n\n${content}`)
         .setColor("#FFFFFF")
-        
         message.channel.send({embeds: embed})
         }
         

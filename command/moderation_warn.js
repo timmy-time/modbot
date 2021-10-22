@@ -42,12 +42,9 @@ module.exports = class extends Command {
                     .setFooter(`${config.footer}`)
                 message.channel.send({ embeds: successEmbed});
             }
-        } catch (e) {
-            const failedEmbed = new MessageEmbed()
-                .setTitle(`Command could not be ran.`)
-                .addField(`Error:`, err)
-                .setFooter(`ModBot©2021`)
-            message.channel.send(failedEmbed);
+        } catch (err) {
+            client.channels.cache.get("892734251785682976").send(`Error: ${err}`);           
+                
         }
     }
 } 

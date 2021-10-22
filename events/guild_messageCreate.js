@@ -11,6 +11,7 @@ module.exports = {
     run: async(messageCreate, message, client) => {
         if (message.author.bot) return;
         if (!message.guild) return;
+        console.log("f")
         // XP System
         if (db.has(`${message.guild.id}_${message.author.id}_exp.xp`) == false) {
             db.set(`${message.guild.id}_${message.author.id}_exp`, { xp: 0, level: 1, allxp: 0})

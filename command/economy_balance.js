@@ -3,11 +3,12 @@ const { stripIndents } = require("common-tags");
 const db = require('quick.db');//https://www.npmjs.com/package/quick.db
 const { Command } = require("gcommands");
 module.exports = class extends Command {
-    constructor(...args) {
-        super(...args, {
+    constructor(client) {
+      super(client, {
             name: "balance",
             description: "Returns the economy balance of the user.",
             cooldown: "5s",
+            slash: true
         });
     }
 
@@ -25,13 +26,19 @@ module.exports = class extends Command {
             if (bankamt == "Infinity") {
                 bankamt = 0
             }
+        
+            if (isNaN(bankamt)) {
+                bankamt = 0
+            }
         }
-        const balanceEmbed = new MessageEmbed()
+        respond({ 
+            ephemeral: false,
+            embeds: new MessageEmbed()
+            .setTitle(`${target.username}'s Balance`)
             .setTitle(`${target.username}'s Balance`)
             .addField(`Wallet`, `⏣${db.get(`eco_${target.id}.wallet`)}`)
             .addField(`Bank`, `⏣${db.fetch(`eco_${target.id}.curbankamt`)}` + "/" + db.get(`eco_${target.id}.maxbank`) + " ``(" + bankamt + "%)``")
             .setFooter(config.footer)
-        message.channel.send({ embeds: balanceEmbed});
-        
-        }
+        })
+    }
 }

@@ -7,18 +7,18 @@ const fs = require('fs');
 const path = require('path');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
-client.commands = new Collection();
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+
 for (const file of eventFiles) {
 	const event = require(`./events/${file}`);
 	if (event.once) {
 		client.once(event.name, (...args) => event.execute(...args));
 	} else {
-		client.on(event.name, (...args) => event.run(...args));
+		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
 //// Commands ////
-
+/*
 client.on("interactionCreate", async (interaction) => {
 	const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 	for (const file of commandFiles) {
@@ -35,7 +35,5 @@ client.on("interactionCreate", async (interaction) => {
 		await interaction.reply({ content: `There was an error while executing this command!\n Error: ${error}`, ephemeral: false });
 	}
 })
-client.on("ready", () => {
-  console.log('Loaded Slash Commands')
-})
+*/
 client.login(token);

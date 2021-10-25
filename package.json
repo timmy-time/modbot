@@ -1,19 +1,20 @@
 {
   "dependencies": {
     "@discordjs/builders": "^0.6.0",
-    "@discordjs/rest": "^0.1.0-canary.0",
+    "@discordjs/rest": "0.1.0-canary.0",
     "common-tags": "^1.8.0",
     "discord-api-types": "^0.23.1",
-    "discord.js": "^13.1.0",
-    "gcommands": "^7.1.1",
-    "nodemon": "^2.0.13",
+    "discord.js": "^13.2.0",
+    "nodemon": "^2.0.14",
     "quick.db": "^7.1.3",
     "random": "^3.0.6"
   },
   "name": "modbot",
   "version": "2.0.0",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^16.11.4"
+  },
   "scripts": {
     "reloadcmd": "node deploy-commands.js",
     "start": "node deploy-commands.js && node index.js"

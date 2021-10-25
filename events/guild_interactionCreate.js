@@ -1,5 +1,4 @@
 const { MessageEmbed, Message, MessageAttachment } = require("discord.js");
-const { MessageButton, MessageActionRow } = require("gcommands/src");
 const config = require("../config.js");
 const db = require('quick.db');
 const random = require('random')
@@ -7,7 +6,7 @@ const random = require('random')
 
 module.exports = {
 	name: 'interactionCreate',
-	execute(interaction) {
+	async execute(interaction) {
         const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
         for (const file of commandFiles) {
             const command = require(`../../commands/${file}`);

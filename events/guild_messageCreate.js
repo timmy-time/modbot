@@ -1,5 +1,4 @@
 const { MessageEmbed, Message, MessageAttachment } = require("discord.js");
-const { MessageButton, MessageActionRow } = require("gcommands/src");
 const config = require("../config.js");
 const db = require('quick.db');
 const random = require('random')
@@ -8,7 +7,7 @@ const random = require('random')
 module.exports = {
     name: "messageCreate",
     once: false,
-    run: async(messageCreate, message, client) => {
+	async execute(messageCreate, message, client) {
         if (message.author.bot) return;
         if (!message.guild) return;
         console.log("f")

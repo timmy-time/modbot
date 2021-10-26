@@ -10,23 +10,20 @@ module.exports = {
         .addSubcommandGroup((group) => 
             group
                 .setName("manage")
-                .addSubcommand((group) => group
-                    .addSubcommand((subcommand ) => 
-                        subcommand 
-                            .addUserOption((option) => 
-                                option.setName('user')
-                                .setDescription('The user whose xp to alter')
-                                .setRequired(false),
-                            )
-                    )
-                    .addSubcommand((subcommand) => 
-                        subcommand
-                            .addIntergerOption((option) => 
-                                option.setName('id')
+                .addSubcommand((subcommand) => 
+                    subcommand
+                        .addUserOption((option) => 
+                            option
+                            .setName('user')
+                        .setDescription('The user whose xp to alter')
+                        .setRequired(false),
+                        )
+                        .addIntergerOption((option) => 
+                            option.setName('id')
                                 .setDescription("The id of the user to warn")
                                 .setRequired(false)
-                            )
-                    )
+                        )
+
                 )
                 // Adding a SubcommandGroup as 'add'
                 .addSubcommand((subcommand) => 

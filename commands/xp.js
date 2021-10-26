@@ -161,7 +161,7 @@ module.exports = {
             } else if (interaction.options.getSubcommandGroup() === 'leaderboard') {
                 if (interaction.options.getSubcommand('leaderboard') === 'xp') {
                     let content = "";
-                    let xp = db.all().filter(data => data.ID.startsWith(`exp_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data)
+                    let xp = db.all().filter(data => data.ID.startsWith(`exp_${interaction.guild.id}_`)).sort((a, b) => (a.data < b.data) ? 1 : -1);
                     xp.length = 10;
                     try {
                         for (var i in xp) {
@@ -177,7 +177,7 @@ module.exports = {
                     interaction.reply({embeds: [embed]});
                 } else if (interaction.options.getSubcommand('leaderboard') === 'level') {
                     let content = "";
-                    let xp = db.all().filter(data => data.ID.startsWith(`exp_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data)
+                    let xp = db.all().filter(data => data.ID.startsWith(`exp_${messageCreate.guild.id}_`)).sort((a, b) => (a.data < b.data) ? 1 : -1);
                     xp.length = 10;
                     try {
                         for (var i in xp) {

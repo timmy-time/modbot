@@ -12,15 +12,16 @@ module.exports = {
         if (!message.guild) return;
         console.log("f")
         // XP System
-        if (db.has(`${message.guild.id}_${message.author.id}_exp.xp`) == false) {
-            db.set(`${message.guild.id}_${message.author.id}_exp`, { xp: 0, level: 1, allxp: 0})
+        user = messageCreate.author
+        if (db.has(`exp_${messageCreate.guild.id}_${user.id}.xp`) == false) {
+            db.set(`exp_${messageCreate.guild.id}_${user.id}`, { allxp: 0, xp: 0, level: 1})
         }
-        let curlvl = await db.get(`${message.guild.id}_${message.author.id}_exp.level`);
-        db.add(`${message.guild.id}_${message.author.id}_exp.xp`, random.int(5, 50))
-        db.add(`${message.guild.id}_${message.author.id}_exp.allxp`, random.int(5, 50))
-        if (db.get(`${message.guild.id}_${message.author.id}_exp.xp`) >= curlvl * 300) {
-            db.subtract(`${message.guild.id}_${message.author.id}_exp.xp`, curlvl * 300);
-            db.add(`${message.guild.id}_${message.author.id}_exp.level`, 1);
+        let curlvl = await db.get(`exp_${messageCreate.guild.id}_${user.id}.level`);
+        db.add(`exp_${messageCreate.guild.id}_${user.id}.xp`, random.int(5, 50))
+        db.add(`exp_${messageCreate.guild.id}_${user.id}.allxp`, random.int(5, 50))
+        if (db.get(`exp_${messageCreate.guild.id}_${user.id}.xp`) >= curlvl * 300) {
+            db.subtract(`exp_${messageCreate.guild.id}_${user.id}.xp`, curlvl * 300);
+            db.add(`exp_${messageCreate.guild.id}_${user.id}.level`, 1);
             const levelEmbed = new MessageEmbed()
                 .setColor('#0099ff')
                 .setTitle('Level up!')
@@ -30,7 +31,7 @@ module.exports = {
                 )
                 .setTimestamp()
 
-                message.channel.send({ embeds: levelEmbed});
+                messageCreate.channel.send({ embeds: levelEmbed});
         }
     }
 }

@@ -11,9 +11,12 @@
   "name": "modbot",
   "version": "2.0.0",
   "main": "index.js",
+<<<<<<< HEAD
   "devDependencies": {
     "@types/node": "^16.11.4"
   },
+=======
+>>>>>>> d0cc0d4193eaae2a4bd0cb9ca13995ca24bb5270
   "scripts": {
     "reloadcmd": "node deploy-commands.js",
     "start": "node deploy-commands.js && node index.js"

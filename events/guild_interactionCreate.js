@@ -2,7 +2,6 @@ const { MessageEmbed, Message, MessageAttachment } = require("discord.js");
 const config = require("../config.js");
 const db = require('quick.db');
 const fs = require('fs');
-const random = require('random')
 
 
 module.exports = {

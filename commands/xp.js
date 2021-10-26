@@ -1,7 +1,6 @@
 const { Discord, DiscordJS, MessageEmbed } = require('discord.js');
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const db = require('quick.db');
-const random = require('random')
 const config = require("../config.js")
 
 module.exports = {

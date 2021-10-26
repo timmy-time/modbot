@@ -1,7 +1,6 @@
 const { Command } = require("gcommands");
 const { MessageEmbed } = require('discord.js');
 const db = require('quick.db');
-const random = require('random');
 let rint = 0;
 msgArray = [`coin.exe has stopped working`, `I only give money to hookers`, `go ask someone else`,`oh heck nah`,`the atm is out of order, sorry`, `bye jerk, no coins for you`, `ew no`, `back in my day we worked for a living`, `i would not share with the likes of you`, `ew get away`, `ew get away`, `can you not`, `nah, would rather not feed your gambling addiction`, `ok sure, you have ${rint}`, `ur a bit stanky but here's ${rint} coins`, `Oh, you poor little beggar, take ${rint} coins`, `you get ${rint} COINS`, `${rint} coins for you`];
 module.exports = class extends Command {

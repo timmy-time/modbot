@@ -1,7 +1,11 @@
 const { MessageEmbed, Message, MessageAttachment } = require("discord.js");
 const config = require("../config.js");
 const db = require('quick.db');
-const random = require('random')
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+  }
 
 
 module.exports = {
@@ -16,8 +20,8 @@ module.exports = {
             db.set(`exp_${messageCreate.guild.id}_${user.id}`, { allxp: 0, xp: 0, level: 1})
         }
         let curlvl = await db.get(`exp_${messageCreate.guild.id}_${user.id}.level`);
-        db.add(`exp_${messageCreate.guild.id}_${user.id}.xp`, random.int(5, 50))
-        db.add(`exp_${messageCreate.guild.id}_${user.id}.allxp`, random.int(5, 50))
+        db.add(`exp_${messageCreate.guild.id}_${user.id}.xp`, getRandomIntInclusive(5, 50))
+        db.add(`exp_${messageCreate.guild.id}_${user.id}.allxp`, getRandomIntInclusive(5, 50))
         if (db.get(`exp_${messageCreate.guild.id}_${user.id}.xp`) >= curlvl * 300) {
             db.subtract(`exp_${messageCreate.guild.id}_${user.id}.xp`, curlvl * 300);
             db.add(`exp_${messageCreate.guild.id}_${user.id}.level`, 1);

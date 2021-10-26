@@ -1,7 +1,6 @@
 const { Command } = require("gcommands");
 const { MessageEmbed } = require('discord.js');
 const db = require('quick.db');
-const random = require('random')
 module.exports = class extends Command {
     constructor(...args) {
         super(...args, {

@@ -1,6 +1,6 @@
 const { Discord, MessageEmbed, RichEmbed } = require("discord.js");
 const { stripIndents } = require("common-tags");
-const db = require('quick.db');//https://www.npmjs.com/package/quick.db
+const db = require('quick.db');
 const { Command } = require("gcommands");
 module.exports = class extends Command {
     constructor(client) {

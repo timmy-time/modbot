@@ -7,28 +7,34 @@ const { userInfo } = require('os');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("warn")
+        .setDescription('Check or manage Warnings')
         // Adding a SubcommandGroup as 'manage'
         .addSubcommandGroup((group) => 
             group
                 .setName("manage")
+                .setDescription('Manage the warnings of a user.')
                 .addSubcommand((subcommand) => 
                     subcommand
+                        .setName('user')
+                        .setDescription('Decide the user')
                         .addUserOption((option) => 
                             option
-                            .setName('user')
-                        .setDescription('The user whose xp to alter')
-                        .setRequired(false),
+                                .setName('user')
+                                .setDescription('The user whose xp to alter')
+                                .setRequired(true),
                         )
+
                 )
                 // Adding a SubcommandGroup as 'add'
                 .addSubcommand((subcommand) => 
                     subcommand
                         .setName("add")
+                        .setDescription('Add a warning to the specified user.')
                         .addUserOption((subcommand) => 
                             subcommand
-                                .setName('add')
-                                .setDescription('Add a warning to the specificied user.')
-                                .setRequired(true),
+                                .setName('user')
+                                .setDescription('The user whose xp to alter')
+                                .setRequired(true)
                         )
                         // Adding a StringOption as 'reason'
                         .addStringOption(option => 
@@ -37,11 +43,13 @@ module.exports = {
                                 .setDescription('Reason for the warning')
                                 .setRequired(false),
                         )
+
                 )
-                // Adding a SubcommandGroup as 'remove'
+                // Adding a Subcommand as 'remove'
                 .addSubcommand((subcommand) => 
                     subcommand
                         .setName("remove")
+                        .setDescription('Remove one of the warnings')
                         .addUserOption((option) =>
                             option
                                 .setName('remove')

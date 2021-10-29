@@ -6,7 +6,7 @@ const config = require("../config.js")
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("xp")
-    .setDescription("removes xp from a user")
+    .setDescription("User's XP")
     
     .addSubcommandGroup((group) =>
 	group

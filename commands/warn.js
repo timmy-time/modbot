@@ -1,7 +1,8 @@
 const { Discord, DiscordJS, MessageEmbed } = require('discord.js');
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const db = require('quick.db');
-const config = require("../config.js")
+const config = require("../config.js");
+const { userInfo } = require('os');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -68,12 +69,24 @@ module.exports = {
             )                
     ),
     async execute(interaction, message, messageCreate, args, option, client) {
-        try {
-            interaction.reply(interaction.guild)
-        } catch (err) {
-            console.log(err)
+        let guild = interaction.guild;
+        let user = 65546345645;
+        if (user.hasPermission(message.member, "MANAGE_MESSAGES")) {
+            let member = message.mentions.members.first() || message.guild.members.cache.get(option.user);
+            if (member) {
+                let warnings = db.get(`warnings_${member.id}`);
+                if (warnings) {
+                    let embed = new MessageEmbed()
+                        .setTitle(`Warnings for ${member.user.tag}`)
+                        .setDescription(warnings.map(warning => `${warning.reason} - ${warning.author}`).join("\n"))
+                        .setColor(config.colors.warning);
+                    message.channel.send(embed);
+                } else {
+                    message.channel.send("This user has no warnings.");
+                }
+            } else {
+                message.channel.send("Please specify a user.");
+            }
         }
-
-
     }
 }

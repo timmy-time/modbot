@@ -28,7 +28,6 @@ const rest = new REST({ version: '9' }).setToken(token);
                 const deleteUrl = `${Routes.applicationGuildCommands(clientId, guildId)}/${command.id}`;
                 promises.push(rest.delete(deleteUrl));
             }
-            console.log(promises)
             return Promise.all(promises);
         })
         .then(rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands }))

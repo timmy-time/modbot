@@ -20,13 +20,7 @@ module.exports = {
                             option
                                 .setName('user')
                                 .setDescription('The user whose xp to alter')
-                                .setRequired(false),
-                        )
-                        .addIntegerOption((option) => 
-                            option
-                                .setName('id')
-                                .setDescription("The id of the user to warn")
-                                .setRequired(false)
+                                .setRequired(true),
                         )
 
                 )
@@ -37,8 +31,8 @@ module.exports = {
                         .setDescription('Add a warning to the specified user.')
                         .addUserOption((subcommand) => 
                             subcommand
-                                .setName('add')
-                                .setDescription('Add a warning to the specificied user.')
+                                .setName('user')
+                                .setDescription('The user whose xp to alter')
                                 .setRequired(true)
                         )
                         // Adding a StringOption as 'reason'
@@ -62,24 +56,26 @@ module.exports = {
                         )
                 )   
             // Adding a SubcommandGroup as ''
-            .addSubcommand((subcommand) =>
-                subcommand
+            .addSubcommandGroup((group) =>
+                group
                     .setName('show')
                     .setDescription('Show the users warnings')
-                    .addUserOption((option) =>
-                            option
-                                .setName('user')
-                                .setDescription("The user that you want to see.")
-                                .setRequired(false)
-                    ) 
+                    
+                    .addSubcommand((subcommand) => 
+                        subcommand
+                            .setName("user")
+                            .setDescription('Remove one of the warnings')
+                            .addUserOption((option) =>
+                                option
+                                    .setName('user')
+                                    .setDescription("The user that you want to see.")
+                                    .setRequired(true)
+                            )
+                    )  
             ),  
     async execute(interaction, message, args, option, client) {
         try {
-            interaction.reply(interaction.options.getSubcommandGroup())
-            interaction.reply(interaction.options.getSubcommand())
-            interaction.reply(interaction.options.getString())
-            interaction.reply(interaction.options.getUser())
-            interaction.reply(interaction.options.getInteger())
+            interaction.reply(`${interaction.options.getSubcommandGroup()}\n${interaction.options.getSubcommand()}\n${interaction.options.getString()}\n${interaction.options.getUser()}\n${interaction.options.getInteger()}`)
         } catch (err) {
             console.log(err)
         }

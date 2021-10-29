@@ -12,8 +12,8 @@ module.exports = {
     name: "messageCreate",
     once: false,
 	async execute(messageCreate, message, client) {
-        if (message.author.bot) return;
-        if (!message.guild) return;
+        if (messageCreate.author.bot) return;
+        if (!messageCreate.guild) return;
         // XP System
         user = messageCreate.author
         if (db.has(`exp_${messageCreate.guild.id}_${user.id}.xp`) == false) {

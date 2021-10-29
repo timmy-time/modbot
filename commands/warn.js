@@ -19,12 +19,6 @@ module.exports = {
                         .setDescription('The user whose xp to alter')
                         .setRequired(false),
                         )
-                        .addIntergerOption((option) => 
-                            option.setName('id')
-                                .setDescription("The id of the user to warn")
-                                .setRequired(false)
-                        )
-
                 )
                 // Adding a SubcommandGroup as 'add'
                 .addSubcommand((subcommand) => 
@@ -34,59 +28,55 @@ module.exports = {
                             subcommand
                                 .setName('add')
                                 .setDescription('Add a warning to the specificied user.')
-                                .setRequired(true)
+                                .setRequired(true),
                         )
                         // Adding a StringOption as 'reason'
                         .addStringOption(option => 
                             option
                                 .setName('reason')
                                 .setDescription('Reason for the warning')
+                                .setRequired(false),
                         )
-
-
+                )
                 // Adding a SubcommandGroup as 'remove'
-                .addSubcommandGroup((group) => 
-                    group
+                .addSubcommand((subcommand) => 
+                    subcommand
                         .setName("remove")
                         .addUserOption((option) =>
                             option
                                 .setName('remove')
                                 .setDescription('Remove a warning from the specificied user.')
-                                .setRequired(true))
+                                .setRequired(true)),
+                        )
                 )
-            )
-
-            // Adding a SubcommandGroup as ''
-            .addSubcommandGroup((group) =>
-                group
-                    .setName("show")
-                    .addUserOption((option) =>
-                        option
-                            .setName('user')
-                            .setDescription('The user whose xp to alter')
-                            .setRequired(false)
-                    )
-            )                
-    ),
+            
+        // Adding a SubcommandGroup as 'show'
+        .addSubcommandGroup((group) =>
+            group
+                .setName("show")
+                .addUserOption((option) =>
+                    option
+                        .setName('user')
+                        .setDescription('The user whose xp to alter')
+                        .setRequired(true),
+                )
+        ),
     async execute(interaction, message, messageCreate, args, option, client) {
-        let guild = interaction.guild;
-        let user = 65546345645;
-        if (user.hasPermission(message.member, "MANAGE_MESSAGES")) {
-            let member = message.mentions.members.first() || message.guild.members.cache.get(option.user);
-            if (member) {
-                let warnings = db.get(`warnings_${member.id}`);
-                if (warnings) {
-                    let embed = new MessageEmbed()
-                        .setTitle(`Warnings for ${member.user.tag}`)
-                        .setDescription(warnings.map(warning => `${warning.reason} - ${warning.author}`).join("\n"))
-                        .setColor(config.colors.warning);
-                    message.channel.send(embed);
-                } else {
-                    message.channel.send("This user has no warnings.");
+        console.log(interaction.options.getSubcommandGroup())
+        console.log(interaction.options.getSubcommand())
+        console.log(interaction.options.getString())
+        try {
+            if(interaction.options.getSubcommandGroup() == "manage") {
+                if(interaction.options.getSubcommand() == "add") {
+                let user = await interaction.options.getUser('user');
+                let reason = await interaction.options.getString('reason');
                 }
-            } else {
-                message.channel.send("Please specify a user.");
+            } else if (interaction.options.getSubcommandGroup() == "show") {
+                let user = await interaction.options.getUser('user');
+                let reason = await interaction.options.getString('reason');
             }
+        } catch (error) {
+            console.log(error)
         }
     }
 }
